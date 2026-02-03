@@ -57,8 +57,28 @@ export function useWebRTC(currentUserId: string | null) {
         const peerConnection = new RTCPeerConnection(ICE_SERVERS)
 
         peerConnection.ontrack = (event) => {
-            console.log('[useWebRTC] Received remote track!')
-            setRemoteStream(event.streams[0])
+            console.log('[useWebRTC] ✅ Received remote track!', {
+                kind: event.track.kind,
+                trackId: event.track.id,
+                streamCount: event.streams.length,
+                enabled: event.track.enabled
+            })
+
+            // Use the stream from event, or create one from the track
+            let remoteStream = event.streams[0]
+            if (!remoteStream) {
+                console.log('[useWebRTC] No stream in event, creating from track')
+                remoteStream = new MediaStream([event.track])
+            }
+
+            setRemoteStream(remoteStream)
+
+            // Debug: log all senders to verify we're sending tracks
+            console.log('[useWebRTC] Current senders:', peerConnection.getSenders().map(s => ({
+                kind: s.track?.kind,
+                enabled: s.track?.enabled,
+                id: s.track?.id
+            })))
         }
 
         peerConnection.onicecandidate = async (event) => {
@@ -113,6 +133,7 @@ export function useWebRTC(currentUserId: string | null) {
 
             // Create PC with call ID
             const peerConnection = createPeerConnection(call.id)
+            console.log('[useWebRTC] 📤 CALLER adding tracks:', stream.getTracks().map(t => ({ kind: t.kind, id: t.id, enabled: t.enabled })))
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream))
 
             // Create and set offer
@@ -171,6 +192,7 @@ export function useWebRTC(currentUserId: string | null) {
 
             // Create PC
             const peerConnection = createPeerConnection(freshCall.id)
+            console.log('[useWebRTC] 📥 RECEIVER adding tracks:', stream.getTracks().map(t => ({ kind: t.kind, id: t.id, enabled: t.enabled })))
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream))
 
             // Set remote description (offer)
