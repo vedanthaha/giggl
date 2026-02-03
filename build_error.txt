@@ -1,0 +1,31 @@
+
+> chat@0.1.0 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Ved\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Ved\Documents\chat\package-lock.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 6.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/lib/supabase/server.ts:13:40
+Type error: Property 'get' does not exist on type 'Promise<ReadonlyRequestCookies>'.
+
+  11 |             cookies: {
+  12 |                 get(name: string) {
+> 13 |                     return cookieStore.get(name)?.value
+     |                                        ^
+  14 |                 },
+  15 |                 set(name: string, value: string, options: CookieOptions) {
+  16 |                     try {
+Next.js build worker exited with code: 1 and signal: null

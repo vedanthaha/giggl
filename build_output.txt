@@ -1,0 +1,31 @@
+
+> chat@0.1.0 build
+> next build
+
+ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Ved\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Ved\Documents\chat\package-lock.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 5.6s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/signup/password/page.tsx:8:20
+Type error: Cannot find module '@/lib/utils' or its corresponding type declarations.
+
+   6 | import { motion } from 'framer-motion'
+   7 | import { Lock, CheckCircle2, AlertCircle } from 'lucide-react'
+>  8 | import { cn } from '@/lib/utils'
+     |                    ^
+   9 |
+  10 | export default function PasswordSetupPage() {
+  11 |     const [password, setPassword] = useState('')
+Next.js build worker exited with code: 1 and signal: null
