@@ -709,8 +709,24 @@ export default function ChatScreen() {
                         <div className="flex flex-col items-center gap-4 p-8 bg-white/[0.03] border border-white/10 rounded-[2.5rem] backdrop-blur-xl">
                             <h3 className="text-xl font-bold">New Message Request</h3>
                             <div className="flex gap-3 w-full max-w-sm">
-                                <button className="flex-1 bg-primary text-white font-bold py-4 rounded-2xl shadow-xl shadow-primary/20">Accept</button>
-                                <button className="flex-1 bg-white/5 border border-white/10 text-gray-400 font-bold py-4 rounded-2xl">Delete</button>
+                                <button
+                                    onClick={async () => {
+                                        await supabase.from('members').update({ status: 'accepted' }).eq('chat_id', chatId).eq('user_id', currentUser.id)
+                                        setUserStatus('accepted')
+                                    }}
+                                    className="flex-1 bg-primary text-white font-bold py-4 rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                >
+                                    Accept
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        await supabase.from('members').delete().eq('chat_id', chatId).eq('user_id', currentUser.id)
+                                        router.push('/chats')
+                                    }}
+                                    className="flex-1 bg-white/5 border border-white/10 text-gray-400 font-bold py-4 rounded-2xl hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     ) : (
