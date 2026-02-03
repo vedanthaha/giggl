@@ -1,14 +1,24 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-const ICE_SERVERS = {
+const ICE_SERVERS: RTCConfiguration = {
     iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
         { urls: 'stun:stun2.l.google.com:19302' },
         { urls: 'stun:stun3.l.google.com:19302' },
         { urls: 'stun:stun4.l.google.com:19302' },
+        // IMPORTANT: For production calls cross-network (NAT/Firewalls), 
+        // you should add a TURN server here (e.g. from Metered.ca or Twilio)
+        /*
+        {
+            urls: 'turn:YOUR_TURN_DOMAIN:3478',
+            username: 'YOUR_USERNAME',
+            credential: 'YOUR_PASSWORD'
+        }
+        */
     ],
+    iceCandidatePoolSize: 10,
 }
 
 export function useWebRTC(currentUserId: string | null) {
@@ -104,8 +114,14 @@ export function useWebRTC(currentUserId: string | null) {
         }
 
         peerConnection.oniceconnectionstatechange = () => {
-            console.log('[useWebRTC] ICE state:', peerConnection.iceConnectionState)
-            if (peerConnection.iceConnectionState === 'disconnected' || peerConnection.iceConnectionState === 'failed') {
+            const state = peerConnection.iceConnectionState
+            console.log('[useWebRTC] 🧊 ICE connection state changed:', state)
+
+            if (state === 'failed') {
+                console.error('[useWebRTC] ❌ ICE Connection Failed. If you are on different networks, you likely need a TURN server.')
+            }
+
+            if (state === 'disconnected' || state === 'failed') {
                 cleanup()
             }
         }
@@ -115,7 +131,10 @@ export function useWebRTC(currentUserId: string | null) {
     }, [currentUserId, supabase, cleanup])
 
     const startCall = async (receiverId: string, type: 'voice' | 'video') => {
-        if (!currentUserId) return
+        if (!currentUserId) {
+            console.error('[useWebRTC] ❌ Cannot start call: User is not authenticated. Check your Supabase session in production!')
+            return
+        }
         console.log(`[useWebRTC] Starting ${type} call...`)
 
         try {
