@@ -42,10 +42,16 @@
   }
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: 'Outfit', sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .font-brand {

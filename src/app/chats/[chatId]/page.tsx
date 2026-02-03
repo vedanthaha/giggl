@@ -517,9 +517,9 @@ export default function ChatScreen() {
             </div>
 
             <div className="flex-1 flex flex-col h-full relative">
-                <header className="h-20 px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
-                    <div className="flex items-center gap-4 cursor-pointer group" onClick={() => setIsPreviewOpen(true)}>
-                        <Link href="/chats" className="md:hidden p-2 -ml-2"><ChevronLeft /></Link>
+                <header className="h-16 md:h-20 px-4 md:px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
+                    <div className="flex items-center gap-3 md:gap-4 cursor-pointer group" onClick={() => setIsPreviewOpen(true)}>
+                        <Link href="/chats" className="md:hidden p-2 -ml-2 text-gray-400 hover:text-white"><ChevronLeft className="w-6 h-6" /></Link>
                         <div className="relative">
                             <img src={receipient?.photo_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'} className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl object-cover bg-white/5 border border-white/10 group-hover:scale-105 transition-transform" alt="" />
                             {receipient?.type === 'user' && (

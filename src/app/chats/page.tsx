@@ -3,17 +3,9 @@
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, Settings, UserPlus, Search, Users, Sparkles } from 'lucide-react'
-import Link from 'next/link'
-import { formatDistanceToNow } from 'date-fns'
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { motion } from 'framer-motion'
+import { MessageCircle, Sparkles } from 'lucide-react'
 import ChatSidebar from '@/components/ChatSidebar'
-
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs))
-}
 
 export default function ChatsPage() {
     const [currentUser, setCurrentUser] = useState<any>(null)
@@ -34,12 +26,12 @@ export default function ChatsPage() {
 
     return (
         <div className="h-screen w-full bg-[#0a0a0d] text-white flex overflow-hidden">
-            {/* LEFT SIDEBAR - Persistent on desktop, hidden on mobile */}
-            <div className="w-[300px] lg:w-[350px] border-r border-white/5 hidden md:block h-full">
+            {/* LEFT SIDEBAR - Always visible on mobile for /chats, hidden on mobile for /chats/[id] */}
+            <div className="w-full md:w-[300px] lg:w-[350px] md:border-r border-white/5 h-full">
                 <ChatSidebar />
             </div>
 
-            {/* MAIN AREA - Placeholder when no chat is selected */}
+            {/* MAIN AREA - Only visible on desktop when no chat selected */}
             <div className="hidden md:flex flex-1 items-center justify-center bg-[#07070a] relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full -top-1/2 -right-1/2 pointer-events-none" />
 
