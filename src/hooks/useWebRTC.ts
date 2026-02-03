@@ -23,6 +23,10 @@ export function useWebRTC(currentUserId: string | null) {
     const iceQueue = useRef<any[]>([])
     const supabase = createClient()
 
+    useEffect(() => {
+        console.log('[useWebRTC] Auth status:', currentUserId ? `Authenticated (${currentUserId})` : 'Anonymous (Waiting for auth...)')
+    }, [currentUserId])
+
     // Keep ref in sync with state
     useEffect(() => {
         activeCallRef.current = activeCall
