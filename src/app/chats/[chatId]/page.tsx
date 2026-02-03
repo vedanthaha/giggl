@@ -206,6 +206,11 @@ export default function ChatScreen() {
                 return
             }
             setCurrentUser(user)
+
+            // Request notification permission
+            if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission()
+            }
         }
         fetchUser()
     }, [])
@@ -301,6 +306,18 @@ export default function ChatScreen() {
                         return [...prev, payload.new as Message]
                     })
                     scrollToBottom()
+
+                    // Browser push notification for new messages from others
+                    const newMsg = payload.new
+                    if (newMsg.sender_id !== currentUser.id && document.hidden) {
+                        if (Notification.permission === 'granted') {
+                            new Notification(receipient?.full_name || receipient?.name || 'New Message', {
+                                body: newMsg.text || (newMsg.image_url ? '📷 Sent an image' : newMsg.voice_url ? '🎤 Sent a voice message' : newMsg.gif_url ? 'Sent a GIF' : 'Sent a message'),
+                                icon: receipient?.photo_url || '/logo.png',
+                                tag: `chat-${chatId}` // Prevents duplicate notifications
+                            })
+                        }
+                    }
                 } else if (payload.eventType === 'UPDATE') {
                     setMessages(prev => prev.map(m => m.id === payload.new.id ? payload.new : m))
                 } else if (payload.eventType === 'DELETE') {
@@ -511,13 +528,13 @@ export default function ChatScreen() {
     }
 
     return (
-        <div className="h-screen w-full bg-[#0a0a0d] text-white flex overflow-hidden">
+        <div className="h-[100dvh] w-full bg-[#0a0a0d] text-white flex overflow-hidden">
             <div className="w-[300px] lg:w-[350px] border-r border-white/5 hidden md:block h-full transition-all">
                 <ChatSidebar />
             </div>
 
-            <div className="flex-1 flex flex-col h-full relative">
-                <header className="h-16 md:h-20 px-4 md:px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
+            <div className="flex-1 flex flex-col h-full min-h-0">
+                <header className="h-16 md:h-20 shrink-0 px-4 md:px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
                     <div className="flex items-center gap-3 md:gap-4 cursor-pointer group" onClick={() => setIsPreviewOpen(true)}>
                         <Link href="/chats" className="md:hidden p-2 -ml-2 text-gray-400 hover:text-white"><ChevronLeft className="w-6 h-6" /></Link>
                         <div className="relative">
@@ -574,8 +591,7 @@ export default function ChatScreen() {
                     }}
                 />
 
-
-                <div className="flex-1 overflow-y-auto px-6 lg:px-12 py-8 space-y-6 scrollbar-hide">
+                <div className="flex-1 overflow-y-auto px-4 md:px-6 lg:px-12 py-4 md:py-8 space-y-4 md:space-y-6 scrollbar-hide">
                     {messages
                         .filter(msg => !msg.deleted_for?.includes(currentUser?.id))
                         .map((msg) => (
@@ -690,7 +706,7 @@ export default function ChatScreen() {
                     <div ref={scrollRef} className="h-4" />
                 </div>
 
-                <div className="px-6 lg:px-12 py-10 bg-gradient-to-t from-[#0a0a0d] to-transparent">
+                <div className="shrink-0 px-4 md:px-6 lg:px-12 py-4 md:py-10 bg-gradient-to-t from-[#0a0a0d] to-transparent">
                     {blockStatus.isBlocking || blockStatus.isBlocked ? (
                         <div className="flex flex-col items-center gap-3 p-8 bg-red-500/5 border border-red-500/10 rounded-[2.5rem] backdrop-blur-xl">
                             <div className="w-12 h-12 bg-red-500/10 rounded-2xl flex items-center justify-center mb-2">
