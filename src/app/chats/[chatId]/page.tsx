@@ -529,14 +529,16 @@ export default function ChatScreen() {
 
     return (
         <div className="h-[100dvh] w-full bg-[#0a0a0d] text-white flex overflow-hidden">
-            <div className="w-[300px] lg:w-[350px] border-r border-white/5 hidden md:block h-full transition-all">
+            {/* SIDEBAR - hidden on mobile, visible on lg+ */}
+            <div className="hidden lg:block w-[320px] border-r border-white/5 h-full">
                 <ChatSidebar />
             </div>
 
             <div className="flex-1 flex flex-col h-full min-h-0">
-                <header className="h-16 md:h-20 shrink-0 px-4 md:px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
-                    <div className="flex items-center gap-3 md:gap-4 cursor-pointer group" onClick={() => setIsPreviewOpen(true)}>
-                        <Link href="/chats" className="md:hidden p-2 -ml-2 text-gray-400 hover:text-white"><ChevronLeft className="w-6 h-6" /></Link>
+                <header className="h-14 lg:h-20 shrink-0 px-4 lg:px-10 flex items-center justify-between border-b border-white/5 bg-black/20 backdrop-blur-2xl z-20">
+                    <div className="flex items-center gap-3 lg:gap-4 cursor-pointer group" onClick={() => setIsPreviewOpen(true)}>
+                        {/* Back button - only visible on mobile */}
+                        <Link href="/chats" className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-white"><ChevronLeft className="w-6 h-6" /></Link>
                         <div className="relative">
                             <img src={receipient?.photo_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'} className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl object-cover bg-white/5 border border-white/10 group-hover:scale-105 transition-transform" alt="" />
                             {receipient?.type === 'user' && (
@@ -591,7 +593,8 @@ export default function ChatScreen() {
                     }}
                 />
 
-                <div className="flex-1 overflow-y-auto px-4 md:px-6 lg:px-12 py-4 md:py-8 space-y-4 md:space-y-6 scrollbar-hide">
+                {/* MESSAGES AREA */}
+                <div className="flex-1 overflow-y-auto px-3 lg:px-12 py-4 lg:py-8 space-y-3 lg:space-y-6 scrollbar-hide">
                     {messages
                         .filter(msg => !msg.deleted_for?.includes(currentUser?.id))
                         .map((msg) => (
@@ -706,7 +709,8 @@ export default function ChatScreen() {
                     <div ref={scrollRef} className="h-4" />
                 </div>
 
-                <div className="shrink-0 px-4 md:px-6 lg:px-12 py-4 md:py-10 bg-gradient-to-t from-[#0a0a0d] to-transparent">
+                {/* INPUT AREA */}
+                <div className="shrink-0 px-3 lg:px-12 py-3 lg:py-6 border-t border-white/5 bg-[#0a0a0d]">
                     {blockStatus.isBlocking || blockStatus.isBlocked ? (
                         <div className="flex flex-col items-center gap-3 p-8 bg-red-500/5 border border-red-500/10 rounded-[2.5rem] backdrop-blur-xl">
                             <div className="w-12 h-12 bg-red-500/10 rounded-2xl flex items-center justify-center mb-2">

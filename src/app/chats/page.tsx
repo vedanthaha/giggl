@@ -25,14 +25,14 @@ export default function ChatsPage() {
     }, [])
 
     return (
-        <div className="h-screen w-full bg-[#0a0a0d] text-white flex overflow-hidden">
-            {/* LEFT SIDEBAR - Always visible on mobile for /chats, hidden on mobile for /chats/[id] */}
-            <div className="w-full md:w-[300px] lg:w-[350px] md:border-r border-white/5 h-full">
+        <div className="h-[100dvh] w-full bg-[#0a0a0d] text-white flex overflow-hidden">
+            {/* SIDEBAR - Full width on mobile, fixed width on lg+ */}
+            <div className="w-full lg:w-[320px] lg:border-r border-white/5 h-full">
                 <ChatSidebar />
             </div>
 
-            {/* MAIN AREA - Only visible on desktop when no chat selected */}
-            <div className="hidden md:flex flex-1 items-center justify-center bg-[#07070a] relative overflow-hidden">
+            {/* MAIN AREA - Only visible on lg+ when no chat selected */}
+            <div className="hidden lg:flex flex-1 items-center justify-center bg-[#07070a] relative overflow-hidden">
                 <div className="absolute inset-0 bg-primary/5 blur-[120px] rounded-full -top-1/2 -right-1/2 pointer-events-none" />
 
                 <div className="text-center space-y-6 z-10">
