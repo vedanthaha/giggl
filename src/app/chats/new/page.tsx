@@ -88,7 +88,38 @@ export default function NewChatPage() {
         setLoading(true)
 
         try {
-            // Create new chat
+            // FIRST: Check if any DM already exists between these two users (in either direction)
+            const { data: existingChats } = await supabase
+                .from('members')
+                .select('chat_id, chats!inner(id, type)')
+                .eq('user_id', currentUser.id)
+                .eq('chats.type', 'dm')
+
+            // Check if any of these chats include the target user
+            if (existingChats && existingChats.length > 0) {
+                for (const chat of existingChats) {
+                    const { data: otherMember } = await supabase
+                        .from('members')
+                        .select('user_id')
+                        .eq('chat_id', chat.chat_id)
+                        .eq('user_id', targetUser.id)
+                        .single()
+
+                    if (otherMember) {
+                        // DM already exists! Just add the message and navigate
+                        console.log('[startDM] Found existing DM, using that instead')
+                        await supabase.from('messages').insert([{
+                            chat_id: chat.chat_id,
+                            sender_id: currentUser.id,
+                            text: initialMessage
+                        }])
+                        router.push(`/chats/${chat.chat_id}`)
+                        return
+                    }
+                }
+            }
+
+            // No existing DM found, create new chat
             const { data: chat, error: chatError } = await supabase
                 .from('chats')
                 .insert([{ type: 'dm' }])
