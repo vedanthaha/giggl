@@ -2,7 +2,13 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 const ICE_SERVERS = {
-    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { urls: 'stun:stun3.l.google.com:19302' },
+        { urls: 'stun:stun4.l.google.com:19302' },
+    ],
 }
 
 export function useWebRTC(currentUserId: string | null) {
@@ -71,7 +77,8 @@ export function useWebRTC(currentUserId: string | null) {
                 remoteStream = new MediaStream([event.track])
             }
 
-            setRemoteStream(remoteStream)
+            // Force a new MediaStream object to trigger state updates in components
+            setRemoteStream(new MediaStream(remoteStream.getTracks()))
 
             // Debug: log all senders to verify we're sending tracks
             console.log('[useWebRTC] Current senders:', peerConnection.getSenders().map(s => ({

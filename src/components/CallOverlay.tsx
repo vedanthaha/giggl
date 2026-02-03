@@ -25,6 +25,7 @@ export default function CallOverlay({
     const remoteAudioRef = useRef<HTMLAudioElement>(null)
     const ringtone = useRef<HTMLAudioElement | null>(null)
     const [isMuted, setIsMuted] = useState(false)
+    const [isVideoEnabled, setIsVideoEnabled] = useState(type === 'video')
     const [callDuration, setCallDuration] = useState(0)
 
     // Unlock audio on first user interaction
@@ -125,6 +126,15 @@ export default function CallOverlay({
                 track.enabled = !track.enabled
             })
             setIsMuted(!isMuted)
+        }
+    }
+
+    const toggleVideo = () => {
+        if (localStream) {
+            localStream.getVideoTracks().forEach(track => {
+                track.enabled = !track.enabled
+            })
+            setIsVideoEnabled(!isVideoEnabled)
         }
     }
 
@@ -237,8 +247,11 @@ export default function CallOverlay({
                                         >
                                             <PhoneOff className="w-8 h-8" />
                                         </button>
-                                        <button className="w-14 h-14 bg-white/10 hover:bg-white/20 rounded-2xl flex items-center justify-center text-white transition-all backdrop-blur-md">
-                                            <Video className="w-6 h-6" />
+                                        <button
+                                            onClick={toggleVideo}
+                                            className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white transition-all backdrop-blur-md ${!isVideoEnabled ? 'bg-red-500/50' : 'bg-white/10 hover:bg-white/20'}`}
+                                        >
+                                            {isVideoEnabled ? <Video className="w-6 h-6" /> : <Video className="w-6 h-6 text-red-400" />}
                                         </button>
                                     </>
                                 ) : null}
