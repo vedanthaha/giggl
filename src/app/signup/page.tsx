@@ -4,9 +4,13 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { ArrowLeft, User, UserCheck, Mail, Lock, Check, X } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { User, Mail, Lock, UserCheck, Check, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import localFont from 'next/font/local'
+
+const ttHoves = localFont({ src: '../fonts/TTHovesPro-Medium.ttf' })
+const astonpoliz = localFont({ src: '../fonts/Astonpoliz.otf' })
 
 export default function SignupPage() {
     const [fullName, setFullName] = useState('')
@@ -119,185 +123,206 @@ export default function SignupPage() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen px-6 py-12 bg-[#0a0a0a] text-white overflow-hidden relative">
-            {/* Background Glows */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-accent/10 blur-[100px] rounded-full" />
-            </div>
-
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full max-w-sm space-y-8 relative z-10"
-            >
-                <div className="text-center">
-                    <motion.h1
-                        initial={{ scale: 0.9 }}
-                        animate={{ scale: 1 }}
-                        className="text-7xl font-normal tracking-tight text-white font-brand"
+        <div className="h-screen w-screen bg-[#0a0a0a] flex">
+            {/* Left Panel - Image Section */}
+            <div className="hidden lg:block lg:flex-1 relative overflow-hidden bg-black border-r border-white/5">
+                {/* Back Button */}
+                <div className="absolute top-6 left-6 z-20">
+                    <Link
+                        href="/"
+                        className="w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center hover:bg-black/60 transition-all cursor-pointer"
                     >
-                        Giggl
-                    </motion.h1>
-                    <p className="mt-3 text-gray-400 font-bold tracking-widest uppercase text-[10px]">
-                        {showOtp ? 'Check your email' : 'Start meaningful conversations.'}
-                    </p>
+                        <ArrowLeft className="w-5 h-5 text-white" />
+                    </Link>
                 </div>
 
-                {!showOtp ? (
-                    <form onSubmit={handleSendOtp} className="glass-card p-10 rounded-[40px] border border-white/[0.05] space-y-5 bg-white/[0.01]">
-                        <div className="space-y-2">
-                            <label className="text-[11px] font-black uppercase tracking-widest ml-1 text-gray-500">Full Name</label>
-                            <div className="relative group">
-                                <User className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors z-20" />
+                <div className="absolute inset-0 z-0">
+                    <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline 
+                        className="w-full h-full object-cover grayscale opacity-50"
+                    >
+                        <source src="/lonely-homer-starry-night-sky-pixel-moewalls-com.mp4" type="video/mp4" />
+                    </video>
+                    {/* Gradient overlay to make text pop */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/30" />
+                </div>
+                
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-12 z-10">
+                    <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-16 object-contain mb-8 invert mix-blend-screen opacity-90" />
+                    <h2 className={`text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight leading-tight ${ttHoves.className}`}>Move your world <br/> somewhere better.</h2>
+                    <p className={`text-gray-300 text-lg lg:text-xl ${astonpoliz.className}`}>Start meaningful conversations in complete privacy.</p>
+                </div>
+            </div>
+
+            {/* Right Panel - Form Section */}
+            <div className="flex-1 flex flex-col justify-center bg-[#0a0a0a] relative overflow-y-auto">
+                {/* Mobile back button */}
+                <div className="absolute top-6 left-6 z-10 lg:hidden">
+                    <Link
+                        href="/"
+                        className="w-10 h-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center hover:bg-white/10 transition-all"
+                    >
+                        <ArrowLeft className="w-5 h-5 text-white" />
+                    </Link>
+                </div>
+                
+                <div className="w-full max-w-md p-8 sm:p-12 mx-auto my-auto">
+                    <div className="mb-10">
+                        <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-16 object-contain mb-8 lg:hidden" />
+                        <h1 className={`text-4xl font-bold text-white mb-3 tracking-tight ${ttHoves.className}`}>
+                            Create Account
+                        </h1>
+                        {!showOtp && (
+                            <p className={`text-gray-400 ${astonpoliz.className}`}>
+                                Already have an account?{' '}
+                                <Link
+                                    href="/login"
+                                    className="text-white hover:text-gray-300 font-bold transition-colors underline decoration-white/20 underline-offset-4"
+                                >
+                                    Log in
+                                </Link>
+                            </p>
+                        )}
+                        {showOtp && (
+                            <p className="text-gray-400 text-sm">
+                                We sent a verification code to <span className="font-bold text-white">{email}</span>
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Form */}
+                    {!showOtp ? (
+                        <form onSubmit={handleSendOtp} className="space-y-5">
+                            {/* Full Name */}
+                            <div>
+                                <label className={`block text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 ${ttHoves.className}`}>
+                                    Full Name
+                                </label>
                                 <input
                                     type="text"
                                     required
-                                    className="hinge-input !pl-14 !bg-white/[0.03] !border-white/5 !rounded-2xl !py-4 focus:!border-primary/50 transition-all text-white relative z-10"
+                                    className={`w-full px-5 py-4 bg-white/[0.03] border border-white/5 rounded-2xl focus:border-white/20 outline-none transition-all text-white placeholder:text-gray-600 ${ttHoves.className}`}
                                     placeholder="John Doe"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
                                 />
                             </div>
-                        </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[11px] font-black uppercase tracking-widest ml-1 text-gray-500">Username</label>
-                            <div className="relative group">
-                                <UserCheck className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors z-20" />
-                                <input
-                                    type="text"
-                                    required
-                                    className={cn(
-                                        "hinge-input !pl-14 !bg-white/[0.03] !border-white/5 !rounded-2xl !py-4 focus:!border-primary/50 transition-all text-white relative z-10",
-                                        usernameStatus === 'taken' && "!border-red-500/50",
-                                        usernameStatus === 'available' && "!border-green-500/50"
-                                    )}
-                                    placeholder="johndoe"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value.replace(/\s+/g, ''))}
-                                />
-                                <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20">
-                                    {usernameStatus === 'checking' && (
-                                        <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                                    )}
-                                    {usernameStatus === 'available' && <Check className="w-5 h-5 text-green-500" />}
-                                    {usernameStatus === 'taken' && <X className="w-5 h-5 text-red-500" />}
+                            {/* Username */}
+                            <div>
+                                <label className={`block text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 ${ttHoves.className}`}>
+                                    Username
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        required
+                                        className={cn(
+                                            `w-full px-5 py-4 pr-12 bg-white/[0.03] border border-white/5 rounded-2xl focus:border-white/20 outline-none transition-all text-white placeholder:text-gray-600 ${ttHoves.className}`,
+                                            usernameStatus === 'taken' && "!border-red-500/50",
+                                            usernameStatus === 'available' && "!border-green-500/50"
+                                        )}
+                                        placeholder="johndoe"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value.replace(/\s+/g, ''))}
+                                    />
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20">
+                                        {usernameStatus === 'checking' && (
+                                            <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                        )}
+                                        {usernameStatus === 'available' && <Check className="w-5 h-5 text-green-500" />}
+                                        {usernameStatus === 'taken' && <X className="w-5 h-5 text-red-500" />}
+                                    </div>
                                 </div>
+                                {usernameStatus === 'taken' && (
+                                    <p className="text-[10px] text-red-500 font-bold mt-2 ml-1">Username already taken</p>
+                                )}
                             </div>
-                            {usernameStatus === 'taken' && (
-                                <p className="text-[10px] text-red-500 font-bold ml-1">Username already taken</p>
-                            )}
-                        </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[11px] font-black uppercase tracking-widest ml-1 text-gray-500">Email</label>
-                            <div className="relative group">
-                                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors z-20" />
+                            {/* Email */}
+                            <div>
+                                <label className={`block text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 ${ttHoves.className}`}>
+                                    Email Address
+                                </label>
                                 <input
                                     type="email"
                                     required
-                                    className="hinge-input !pl-14 !bg-white/[0.03] !border-white/5 !rounded-2xl !py-4 focus:!border-primary/50 transition-all text-white relative z-10"
+                                    className={`w-full px-5 py-4 bg-white/[0.03] border border-white/5 rounded-2xl focus:border-white/20 outline-none transition-all text-white placeholder:text-gray-600 ${ttHoves.className}`}
                                     placeholder="name@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                        </div>
 
-                        {error && (
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="text-red-400 text-[11px] text-center font-bold bg-red-400/10 p-3 rounded-xl border border-red-400/20"
-                            >
-                                {error}
-                            </motion.p>
-                        )}
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-red-400 text-xs text-center font-bold bg-red-400/10 p-4 rounded-xl border border-red-400/20"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
 
-                        <div className="relative group pt-2">
-                            <div className="button-glow-orb opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            {/* Submit */}
                             <button
                                 type="submit"
                                 disabled={loading || usernameStatus === 'checking' || usernameStatus === 'taken'}
-                                className="glass-glow-button w-full !rounded-2xl !py-4 font-black uppercase tracking-widest text-sm disabled:opacity-50"
+                                className={`w-full bg-white text-black py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 mt-6 ${ttHoves.className}`}
                             >
                                 {loading ? 'Sending Code...' : 'Continue'}
                             </button>
-                        </div>
-                    </form>
-                ) : (
-                    <form onSubmit={handleVerifyOtp} className="glass-card p-10 rounded-[40px] border border-white/[0.05] space-y-8 bg-white/[0.01]">
-                        <div className="text-center space-y-2">
-                            <p className="text-xs text-gray-400 font-medium">
-                                We sent a verification code to <br />
-                                <span className="font-bold text-white tracking-tight">{email}</span>
-                            </p>
-                        </div>
+                        </form>
+                    ) : (
+                        <form onSubmit={handleVerifyOtp} className="space-y-6">
+                            <div>
+                                <label className={`block text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 text-center ${ttHoves.className}`}>
+                                    6-Digit Verification Code
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    maxLength={6}
+                                    className={`w-full px-5 py-6 text-center tracking-[0.5em] font-black text-3xl bg-white/[0.03] border border-white/5 rounded-2xl focus:border-white/20 outline-none transition-all text-white placeholder:text-gray-600 ${ttHoves.className}`}
+                                    placeholder="••••••"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                                />
+                            </div>
 
-                        <div className="relative group">
-                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors z-20" />
-                            <input
-                                type="text"
-                                required
-                                maxLength={6}
-                                className="hinge-input !px-14 text-center tracking-[0.5em] font-black text-3xl !bg-white/[0.03] !border-white/5 !rounded-3xl !py-8 focus:!border-primary/50 text-white relative z-10"
-                                placeholder="••••••"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                            />
-                        </div>
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-red-400 text-xs text-center font-bold bg-red-400/10 p-4 rounded-xl border border-red-400/20"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
 
-                        {error && (
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="text-red-400 text-[11px] text-center font-bold bg-red-400/10 p-3 rounded-xl border border-red-400/20"
-                            >
-                                {error}
-                            </motion.p>
-                        )}
-
-                        <div className="space-y-4">
-                            <div className="relative group">
-                                <div className="button-glow-orb opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <div className="space-y-4 pt-2">
                                 <button
                                     type="submit"
                                     disabled={loading || otp.length < 6}
-                                    className="glass-glow-button w-full !rounded-2xl !py-4 font-black uppercase tracking-widest text-sm disabled:opacity-50"
+                                    className={`w-full bg-white text-black py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 ${ttHoves.className}`}
                                 >
-                                    {loading ? 'Verifying...' : 'Verify & Continue'}
+                                    {loading ? 'Verifying...' : 'Verify Code'}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowOtp(false)}
+                                    className={`w-full text-gray-500 text-xs font-bold tracking-widest uppercase hover:text-white transition-colors ${ttHoves.className}`}
+                                >
+                                    Change Email
                                 </button>
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => setShowOtp(false)}
-                                className="w-full text-gray-500 text-[10px] font-black tracking-widest uppercase hover:text-primary transition-colors"
-                            >
-                                Change Details
-                            </button>
-                        </div>
-                    </form>
-                )}
-
-                {!showOtp && (
-                    <p className="text-center text-xs text-gray-500 font-medium">
-                        Already have an account?{' '}
-                        <Link href="/login" className="text-primary font-black hover:text-accent transition-colors">
-                            Log in
-                        </Link>
-                    </p>
-                )}
-            </motion.div>
-
-            <style jsx>{`
-                .glass-card {
-                    background: rgba(255, 255, 255, 0.01);
-                    backdrop-filter: blur(40px);
-                    -webkit-backdrop-filter: blur(40px);
-                }
-            `}</style>
+                        </form>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }

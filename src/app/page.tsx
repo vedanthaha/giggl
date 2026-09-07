@@ -1,14 +1,21 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 import { Shield, Users, Mic, ChevronRight, Lock, MessageSquare, Globe, Plus, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import GlowHorizonFM from '@/components/ui/glow-horizon'
+import { Features } from '@/components/ui/features-8'
+import FooterSection from '@/components/ui/footer'
+import localFont from 'next/font/local'
+import MotionButton from '@/components/ui/motion-button'
+
+const svetze = localFont({ src: './fonts/Svetze.otf' })
+const astonpoliz = localFont({ src: './fonts/Astonpoliz.otf' })
 
 export default function LandingPage() {
-  const router = useRouter()
   const supabase = createClient()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -21,39 +28,38 @@ export default function LandingPage() {
   }, [supabase])
 
   // Animation Variants
-  const fadeInRise = {
+  const fadeInRise: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] as any }
+      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
     }
   }
 
-  const driftBackground = {
-    animate: {
-      backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-      transition: {
-        duration: 20,
-        repeat: Infinity,
-        ease: "linear"
-      }
-    }
+
+
+  const headlineContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.04, delayChildren: 0.2 },
+    },
   }
 
-  const softGlow = {
-    animate: {
-      boxShadow: [
-        "0 0 0px rgba(var(--primary-rgb), 0)",
-        "0 0 20px rgba(var(--primary-rgb), 0.3)",
-        "0 0 0px rgba(var(--primary-rgb), 0)"
-      ],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut" as any
-      }
-    }
+  const headlineChild: Variants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { type: "spring", damping: 15, stiffness: 100 },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      filter: "blur(8px)",
+      transition: { type: "spring", damping: 15, stiffness: 100 },
+    },
   }
 
   return (
@@ -75,12 +81,9 @@ export default function LandingPage() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2.5"
+          className="flex items-center"
         >
-          <div className="w-9 h-9 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <MessageSquare className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-3xl font-normal tracking-tight font-brand">Giggl</span>
+          <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-10 object-contain" />
         </motion.div>
 
         <motion.div
@@ -92,56 +95,47 @@ export default function LandingPage() {
             <Link href="/chats" className="text-sm font-bold bg-white/5 hover:bg-white/10 px-6 py-2.5 rounded-full border border-white/10 transition-all">
               Open App
             </Link>
-          ) : (
-            <>
-              <Link href="/login" className="text-sm font-bold opacity-60 hover:opacity-100 transition-opacity">
-                Sign In
-              </Link>
-              <Link href="/signup" className="text-sm font-bold bg-primary px-6 py-2.5 rounded-full shadow-lg shadow-primary/25 hover:scale-105 transition-all">
-                Get Started
-              </Link>
-            </>
-          )}
+          ) : null}
         </motion.div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-20 px-6 max-w-7xl mx-auto flex flex-col items-center">
-        <motion.div
-          variants={fadeInRise}
-          initial="hidden"
-          animate="visible"
-          className="text-center z-10"
-        >
+      <div className="relative w-full flex flex-col items-center mt-20 sm:mt-32">
+        <div className="absolute inset-0 z-0 pointer-events-none h-[800px] -top-32">
+          <GlowHorizonFM variant="top" />
+        </div>
+        <section className="relative pt-20 pb-20 px-6 w-full max-w-7xl mx-auto flex flex-col items-center z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 text-[11px] font-black tracking-[0.2em] uppercase bg-white/[0.03] border border-white/10 rounded-full text-gray-300"
+            variants={fadeInRise}
+            initial="hidden"
+            animate="visible"
+            className="text-center z-10"
           >
-            <Sparkles className="w-3 h-3 text-primary" />
-            Next-Gen Private Messaging
-          </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
-            Conversations deserve <br />
-            <span className="italic">their own</span> <span className="text-primary italic">universe.</span>
-          </h1>
 
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed font-medium">
-            Giggl isn&apos;t just a chat app. It&apos;s a high-fidelity sanctuary for your private world. Encryption by default, intimacy by design.
+          <motion.h1 
+            variants={headlineContainer}
+            initial="hidden"
+            animate="visible"
+            className={`text-5xl md:text-7xl lg:text-8xl tracking-tight mb-8 leading-[1.1] text-white ${svetze.className}`}
+          >
+            {"Conversations elevated to an art form.".split(" ").map((word, index) => (
+              <span key={index} className="inline-block mr-[0.25em]">
+                {word.split("").map((letter, i) => (
+                  <motion.span variants={headlineChild} key={i} className="inline-block">
+                    {letter}
+                  </motion.span>
+                ))}
+              </span>
+            ))}
+          </motion.h1>
+
+          <p className={`text-2xl md:text-3xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed ${astonpoliz.className}`}>
+            Where absolute privacy meets uncompromising elegance.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-            <motion.div variants={softGlow} animate="animate" className="relative group">
-              <div className="button-glow-orb opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <Link href="/signup" className="glass-glow-button !py-5 !px-12 text-xl rounded-full flex items-center gap-3 font-black tracking-tight group-hover:border-white/20">
-                Enter Giggl
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-            <button className="glass-glow-button px-12 py-5 rounded-full bg-white/[0.01] hover:bg-white/[0.03] transition-all font-black uppercase text-sm tracking-widest border-white/5">
-              How It Works
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mt-4">
+            <MotionButton href="/signup" label="Enter Giggl" classes="w-56 border border-white/10 bg-[#111111]" />
+            <MotionButton label="How It Works" classes="w-56 border border-white/10 bg-[#111111]" />
           </div>
         </motion.div>
 
@@ -218,46 +212,10 @@ export default function LandingPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/20 blur-[120px] rounded-full -z-10" />
         </motion.div>
       </section>
+      </div>
 
       {/* Features Section */}
-      <section className="py-40 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              icon: <Lock className="w-8 h-8 text-primary" />,
-              title: "Stealth Protocol",
-              desc: "Zero metadata retention. Your conversations leave no digital footprint."
-            },
-            {
-              icon: <Users className="w-8 h-8 text-accent" />,
-              title: "Infinite Circles",
-              desc: "Create hidden enclaves for your tightest groups. Invitation only, always."
-            },
-            {
-              icon: <Mic className="w-8 h-8 text-primary" />,
-              title: "Raw Fidelity",
-              desc: "Lossless audio and high-bitrate media sharing, completely secured."
-            }
-          ].map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.2 }}
-              whileHover={{ y: -10 }}
-              className="glass-card p-12 rounded-[40px] border border-white/[0.05] bg-white/[0.01] flex flex-col group relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="mb-8 p-5 rounded-2xl bg-white/[0.05] w-fit group-hover:scale-110 transition-transform">
-                {feature.icon}
-              </div>
-              <h3 className="text-3xl font-black mb-4 tracking-tighter">{feature.title}</h3>
-              <p className="text-gray-400 leading-relaxed font-medium">{feature.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <Features />
 
       {/* App Preview / Aesthetic Section */}
       <section className="py-40 relative bg-white/[0.01] overflow-hidden">
@@ -326,24 +284,37 @@ export default function LandingPage() {
 
       {/* Final CTA Section */}
       <section className="py-60 px-6 text-center relative overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="w-full h-full object-cover opacity-50 grayscale"
+          >
+            <source src="/lonely-homer-starry-night-sky-pixel-moewalls-com.mp4" type="video/mp4" />
+          </video>
+          {/* Fading borders to smoothly blend with background */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-transparent" />
+        </div>
+        
+        {/* Call to Action */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="relative z-10 space-y-12"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative z-10 flex flex-col items-center gap-12"
         >
-          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none">
+          <h2 className={`text-6xl md:text-8xl font-black tracking-tighter text-center max-w-4xl leading-[0.9] text-gray-400 ${svetze.className}`}>
             Move your world <br />
-            <span className="text-primary underline decoration-white/10 underline-offset-[20px]">somewhere better.</span>
+            <span className="text-white">somewhere better.</span>
           </h2>
 
           <div className="flex flex-col items-center gap-6">
             <div className="relative group">
-              <div className="button-glow-orb opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <Link href="/signup" className="glass-glow-button !py-6 !px-20 text-2xl rounded-full shadow-2xl shadow-primary/10 transform hover:scale-105 active:scale-95 transition-all flex items-center gap-3 font-black tracking-tighter">
-                Enter Giggl
-                <Sparkles className="w-6 h-6 text-primary" />
-              </Link>
+              <MotionButton href="/signup" label="Enter Giggl" classes="w-64" />
             </div>
             <p className="text-gray-500 font-bold tracking-widest uppercase text-xs">
               Available now. Private forever.
@@ -351,47 +322,11 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Background Text Shadow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30vw] font-black text-white/[0.01] pointer-events-none whitespace-nowrap select-none">
-          PRIVACY PRIVACY PRIVACY
-        </div>
+        {/* Background Text Shadow Removed */}
       </section>
 
       {/* Footer */}
-      <footer className="py-20 px-6 border-t border-white/[0.03] bg-black/50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="flex flex-col items-center md:items-start gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-2xl font-normal tracking-tight uppercase font-brand">Giggl</span>
-            </div>
-            <p className="text-gray-500 text-sm font-medium">Redefining digital intimacy since 2026.</p>
-          </div>
-
-          <div className="flex gap-12">
-            <div className="space-y-4">
-              <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">Security</h4>
-              <ul className="text-sm text-gray-500 space-y-2 font-medium">
-                <li className="hover:text-primary transition-colors cursor-pointer">Protocol</li>
-                <li className="hover:text-primary transition-colors cursor-pointer">Audits</li>
-                <li className="hover:text-primary transition-colors cursor-pointer">Zero Knowledge</li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">Legal</h4>
-              <ul className="text-sm text-gray-500 space-y-2 font-medium">
-                <li className="hover:text-primary transition-colors cursor-pointer">Privacy</li>
-                <li className="hover:text-primary transition-colors cursor-pointer">Transparency</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="mt-20 text-center text-[10px] font-bold tracking-[0.3em] uppercase text-gray-600">
-          &copy; Giggl Private Communications Systems
-        </div>
-      </footer>
+      <FooterSection />
 
       <style jsx>{`
                 .glass-card {
