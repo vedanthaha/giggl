@@ -10,8 +10,10 @@ import GlowHorizonFM from '@/components/ui/glow-horizon'
 import { Features } from '@/components/ui/features-8'
 import FooterSection from '@/components/ui/footer'
 import localFont from 'next/font/local'
+import IPhoneMockup from '@/components/ui/iphone-mockup'
 import MotionButton from '@/components/ui/motion-button'
 
+const ttHoves = localFont({ src: './fonts/TTHovesPro-Medium.ttf' })
 const svetze = localFont({ src: './fonts/Svetze.otf' })
 const astonpoliz = localFont({ src: './fonts/Astonpoliz.otf' })
 
@@ -140,77 +142,93 @@ export default function LandingPage() {
         </motion.div>
 
         {/* iPhone Mockup Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-32 relative perspective-[2000px]"
-        >
-          {/* iPhone 15 Pro Mockup */}
-          <motion.div
-            animate={{
-              y: [0, -15, 0],
-              rotateX: [2, 0, 2],
-              rotateY: [-2, 2, -2]
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="relative z-20 w-[320px] h-[650px] md:w-[380px] md:h-[780px] bg-[#000] rounded-[55px] border-[12px] border-[#1a1a1a] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/20 overflow-hidden"
-          >
-            {/* Dynamic Island */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-full z-50 flex items-center justify-between px-4">
-              <div className="w-2 h-2 rounded-full bg-blue-500/20" />
-              <div className="w-1 h-1 rounded-full bg-white/10" />
-            </div>
+        <div className="mt-40 w-full flex flex-col lg:flex-row items-center gap-16">
+          {/* Left Text */}
+          <div className="flex-1 text-left space-y-8 z-10">
+            <motion.h3 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className={`text-5xl lg:text-7xl font-bold text-white tracking-tight leading-tight ${svetze.className}`}
+            >
+              Privacy you can <br/> actually feel.
+            </motion.h3>
+            <motion.p 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+              className={`text-xl text-gray-400 leading-relaxed max-w-lg ${astonpoliz.className}`}
+            >
+              Every message is encrypted end-to-end. We don't track you, we don't sell your data, and we don't keep logs. Just you and your friends, in complete secrecy.
+            </motion.p>
+          </div>
 
-            {/* Screen Content (The App) */}
-            <div className="w-full h-full bg-[#121212] relative flex flex-col">
-              {/* App Header */}
-              <div className="pt-14 px-6 pb-4 flex items-center justify-between border-b border-white/[0.03]">
-                <span className="font-normal text-2xl tracking-tight font-brand">Giggl</span>
-                <div className="w-8 h-8 rounded-full bg-white/5" />
-              </div>
-
-              {/* App Messages */}
-              <div className="flex-1 p-6 space-y-6 flex flex-col justify-end">
-                <motion.div
-                  initial={{ opacity: 0, x: -20, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ delay: 2, duration: 0.5 }}
-                  className="bg-white/5 px-4 py-3 rounded-2xl rounded-bl-none max-w-[85%] text-sm"
-                >
-                  Is this space actually private? 🔒
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20, scale: 0.8 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ delay: 3, duration: 0.5 }}
-                  className="bg-primary px-4 py-3 rounded-2xl rounded-br-none max-w-[85%] text-sm font-bold self-end"
-                >
-                  End-to-end encrypted. No logs. No trackers. Just us. ✨
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 4 }}
-                  className="flex items-center gap-2 mt-4"
-                >
-                  <div className="flex-1 h-12 bg-white/5 rounded-2xl border border-white/10 px-4 flex items-center text-gray-500 text-xs italic">
-                    Type a secure message...
+          <div className="flex-1 relative perspective-[2000px] flex justify-center lg:justify-end z-20">
+            <motion.div
+              animate={{
+                y: [0, -15, 0],
+                rotateX: [2, 0, 2],
+                rotateY: [-2, 2, -2]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative"
+            >
+              <IPhoneMockup 
+                model="15-pro" 
+                color="space-black" 
+                screenBg="#0a0a0a" 
+                shadow="0 50px 100px -20px rgba(0,0,0,0.8)" 
+                innerShadow={true}
+              >
+                {/* Chat UI */}
+                <div className="w-full h-full relative flex flex-col pt-12">
+                  <div className="px-6 pb-4 flex items-center justify-between border-b border-white/[0.03]">
+                    <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-6 object-contain invert mix-blend-screen" />
+                    <div className="w-8 h-8 rounded-full bg-white/5" />
                   </div>
-                  <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center">
-                    <Plus className="w-5 h-5 text-white" />
+                  
+                  <div className="flex-1 p-5 space-y-6 flex flex-col justify-end pb-8">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20, scale: 0.8 }}
+                      whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ delay: 0.2, duration: 0.5 }}
+                      viewport={{ once: true }}
+                      className={`bg-white/5 px-4 py-3 rounded-2xl rounded-bl-none max-w-[85%] text-sm text-gray-200 ${astonpoliz.className}`}
+                    >
+                      Is this space actually private? 🔒
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: 20, scale: 0.8 }}
+                      whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ delay: 1.5, duration: 0.5 }}
+                      viewport={{ once: true }}
+                      className={`bg-primary text-white px-4 py-3 rounded-2xl rounded-br-none max-w-[85%] text-sm font-bold self-end ${astonpoliz.className}`}
+                    >
+                      End-to-end encrypted. No logs. No trackers. Just us. ✨
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 3 }}
+                      viewport={{ once: true }}
+                      className="flex items-center gap-2 mt-2"
+                    >
+                      <div className={`flex-1 h-12 bg-white/5 rounded-2xl border border-white/10 px-4 flex items-center text-gray-500 text-xs italic ${astonpoliz.className}`}>
+                        Type a secure message...
+                      </div>
+                      <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center">
+                        <Plus className="w-5 h-5 text-white" />
+                      </div>
+                    </motion.div>
                   </div>
-                </motion.div>
-              </div>
-
-              {/* Home Indicator */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-white/20 rounded-full" />
-            </div>
-          </motion.div>
-
-          {/* Gradient Bloom behind Phone */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/20 blur-[120px] rounded-full -z-10" />
-        </motion.div>
+                </div>
+              </IPhoneMockup>
+            </motion.div>
+            {/* Gradient Bloom behind Phone */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/20 blur-[120px] rounded-full -z-10" />
+          </div>
+        </div>
       </section>
       </div>
 
@@ -227,12 +245,12 @@ export default function LandingPage() {
               viewport={{ once: true }}
               className="flex-1 space-y-8"
             >
-              <h2 className="text-5xl md:text-6xl font-black tracking-tight leading-[0.95]">
+              <h2 className={`text-5xl md:text-6xl font-normal tracking-tight leading-[0.95] ${svetze.className}`}>
                 Designed for the <br />
-                <span className="text-accent italic uppercase tracking-widest text-4xl">Supreme</span> <br />
+                <span className="text-accent italic font-bold uppercase tracking-widest text-4xl">Supreme</span> <br />
                 <span className="text-white">Minimalist.</span>
               </h2>
-              <p className="text-xl text-gray-400 leading-relaxed max-w-lg">
+              <p className={`text-xl text-gray-400 leading-relaxed max-w-lg ${astonpoliz.className}`}>
                 Giggl strips away the noise. No ads, no algorithmic feeds, no bloat. Just pure, beautiful human connection.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -242,8 +260,8 @@ export default function LandingPage() {
                   { icon: <Users />, text: "Custom aesthetic profiles" },
                   { icon: <Shield />, text: "Biometric app locking" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-gray-300 font-bold text-sm">
-                    <div className="text-primary h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center">{item.icon}</div>
+                  <div key={i} className={`flex items-center gap-4 text-gray-300 font-bold text-sm ${astonpoliz.className}`}>
+                    <div className="text-white flex items-center justify-center">{item.icon}</div>
                     {item.text}
                   </div>
                 ))}

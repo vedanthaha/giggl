@@ -9,6 +9,11 @@ import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import localFont from 'next/font/local'
+
+const svetze = localFont({ src: '../app/fonts/Svetze.otf' })
+const ttHoves = localFont({ src: '../app/fonts/TTHovesPro-Medium.ttf' })
+const astonpoliz = localFont({ src: '../app/fonts/Astonpoliz.otf' })
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -152,28 +157,15 @@ export default function ChatSidebar() {
     })
 
     return (
-        <div className="w-full h-full flex flex-col border-r border-white/5 bg-black/10">
-            {/* Header */}
-            <header className="px-6 py-8 flex items-center justify-between border-b border-white/5">
-                <h1 className="text-2xl font-normal tracking-tight text-primary font-brand">Giggl</h1>
-                <div className="flex items-center gap-2">
-                    <button onClick={() => router.push('/chats/new')} className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
-                        <UserPlus className="w-4 h-4 text-gray-400" />
-                    </button>
-                    <Link href="/profile" className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
-                        <Settings className="w-4 h-4 text-gray-400" />
-                    </Link>
-                </div>
-            </header>
-
-            <div className="p-4 space-y-4">
+        <div className="w-full h-full flex flex-col border-r border-white/5 bg-[#0a0a0d] relative z-30">
+            <div className="p-4 space-y-4 pt-8">
                 <div className="flex gap-2">
                     {(['dm', 'group', 'requests'] as const).map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={cn(
-                                "flex-1 py-1.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all relative",
+                                `flex-1 py-1.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all relative ${astonpoliz.className}`,
                                 activeTab === tab
                                     ? "bg-primary text-white shadow-lg shadow-primary/20"
                                     : "bg-white/[0.03] text-gray-500 border border-white/5"
@@ -195,7 +187,7 @@ export default function ChatSidebar() {
                         placeholder="Search..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 text-xs bg-white/[0.02] border border-white/5 focus:border-primary/30 rounded-xl outline-none"
+                        className={`w-full pl-9 pr-4 py-2 text-xs bg-white/[0.02] border border-white/5 focus:border-primary/30 rounded-xl outline-none ${ttHoves.className}`}
                     />
                 </div>
             </div>
@@ -207,7 +199,7 @@ export default function ChatSidebar() {
                     </div>
                 ) : filteredChats.length === 0 ? (
                     <div className="text-center py-10 opacity-30 px-4">
-                        <p className="text-[10px] uppercase tracking-widest">No chats</p>
+                        <p className={`text-[10px] uppercase tracking-widest ${astonpoliz.className}`}>No chats</p>
                     </div>
                 ) : (
                     filteredChats.map((chat) => (
@@ -229,7 +221,7 @@ export default function ChatSidebar() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between mb-0.5">
                                         <h3 className={cn(
-                                            "font-bold truncate text-sm",
+                                            `font-bold truncate text-sm ${ttHoves.className}`,
                                             chat.id === chatId ? "text-primary" : "text-gray-200"
                                         )}>{chat.name}</h3>
                                         {chat.lastMessage && (
@@ -238,7 +230,7 @@ export default function ChatSidebar() {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-[10px] text-gray-500 truncate">
+                                    <p className={`text-[11px] text-gray-500 truncate mt-1 ${ttHoves.className}`}>
                                         {chat.lastMessage?.text || 'No messages'}
                                     </p>
                                 </div>

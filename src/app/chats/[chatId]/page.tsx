@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import ChatSidebar from '@/components/ChatSidebar'
+import GlobalSidebar from '@/components/GlobalSidebar'
 import GifStickerPanel from '@/components/GifStickerPanel'
 import ProfilePreview from '@/components/ProfilePreview'
 import { Phone, Video, MoreVertical, Shield } from 'lucide-react'
@@ -529,8 +530,9 @@ export default function ChatScreen() {
 
     return (
         <div className="h-[100dvh] w-full bg-[#0a0a0d] text-white flex overflow-hidden">
+            <GlobalSidebar />
             {/* SIDEBAR - hidden on mobile, visible on lg+ */}
-            <div className="hidden lg:block w-[320px] border-r border-white/5 h-full">
+            <div className="hidden lg:block w-[320px] border-r border-white/5 h-full flex-shrink-0 z-30">
                 <ChatSidebar />
             </div>
 

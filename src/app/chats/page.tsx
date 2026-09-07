@@ -6,6 +6,10 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { MessageCircle, Sparkles } from 'lucide-react'
 import ChatSidebar from '@/components/ChatSidebar'
+import GlobalSidebar from '@/components/GlobalSidebar'
+import localFont from 'next/font/local'
+
+const ttHoves = localFont({ src: '../fonts/TTHovesPro-Medium.ttf' })
 
 export default function ChatsPage() {
     const [currentUser, setCurrentUser] = useState<any>(null)
@@ -26,8 +30,9 @@ export default function ChatsPage() {
 
     return (
         <div className="h-[100dvh] w-full bg-[#0a0a0d] text-white flex overflow-hidden">
+            <GlobalSidebar />
             {/* SIDEBAR - Full width on mobile, fixed width on lg+ */}
-            <div className="w-full lg:w-[320px] lg:border-r border-white/5 h-full">
+            <div className="w-full lg:w-[320px] lg:border-r border-white/5 h-full flex-shrink-0 z-30">
                 <ChatSidebar />
             </div>
 
@@ -43,9 +48,9 @@ export default function ChatsPage() {
                     >
                         <MessageCircle className="w-12 h-12 text-primary" />
                     </motion.div>
-                    <div className="space-y-2">
-                        <h2 className="text-4xl font-normal font-brand text-white tracking-tighter">Welcome to Giggl</h2>
-                        <p className="text-gray-500 text-sm max-w-xs mx-auto font-medium">Select a conversation from the sidebar or start a new giggle to get started.</p>
+                    <div className="space-y-6">
+                        <img src="/Welcome to Giggl.png" alt="Welcome to Giggl" className="w-[360px] mx-auto object-contain" />
+                        <p className={`text-gray-500 text-sm max-w-xs mx-auto font-medium ${ttHoves.className}`}>Select a conversation from the sidebar or start a new giggle to get started.</p>
                     </div>
                 </div>
 

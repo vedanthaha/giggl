@@ -11,23 +11,23 @@ import {
 const links = [
     {
         title: 'Security',
-        href: '#',
+        href: '/security',
     },
     {
         title: 'Privacy',
-        href: '#',
+        href: '/privacy',
     },
     {
         title: 'Transparency',
-        href: '#',
+        href: '/transparency',
     },
     {
         title: 'Terms',
-        href: '#',
+        href: '/terms',
     },
     {
         title: 'Help',
-        href: '#',
+        href: '/help',
     },
 ]
 
