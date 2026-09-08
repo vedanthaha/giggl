@@ -8,6 +8,7 @@ import { ArrowLeft, User, UserCheck, Mail, Lock, Check, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '../../lib/utils'
 import localFont from 'next/font/local'
+import GoogleSignInButton from '@/components/GoogleSignInButton'
 
 const ttHoves = localFont({ src: '../fonts/TTHovesPro-Medium.ttf' })
 const astonpoliz = localFont({ src: '../fonts/Astonpoliz.otf' })
@@ -23,6 +24,14 @@ export default function SignupPage() {
     const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
     const router = useRouter()
     const supabase = createClient()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            const err = params.get('error')
+            if (err) setError(err)
+        }
+    }, [])
 
     useEffect(() => {
         const checkUsername = async () => {
@@ -170,7 +179,7 @@ export default function SignupPage() {
                 </div>
                 
                 <div className="w-full max-w-md p-8 sm:p-12 mx-auto my-auto">
-                    <div className="mb-10">
+                    <div className="mb-8">
                         <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-16 object-contain mb-8 lg:hidden" />
                         <h1 className={`text-4xl font-bold text-white mb-3 tracking-tight ${ttHoves.className}`}>
                             Create Account
@@ -195,7 +204,25 @@ export default function SignupPage() {
 
                     {/* Form */}
                     {!showOtp ? (
-                        <form onSubmit={handleSendOtp} className="space-y-5">
+                        <>
+                            {/* Google OAuth Button */}
+                            <GoogleSignInButton
+                                text="Continue with Google"
+                                className={ttHoves.className}
+                                onError={(msg) => setError(msg)}
+                            />
+
+                            {/* Divider */}
+                            <div className="relative my-6 flex items-center justify-center">
+                                <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t border-white/10" />
+                                </div>
+                                <div className={`relative bg-[#0a0a0a] px-4 text-xs uppercase tracking-widest text-gray-500 font-bold ${ttHoves.className}`}>
+                                    or
+                                </div>
+                            </div>
+
+                            <form onSubmit={handleSendOtp} className="space-y-5">
                             {/* Full Name */}
                             <div>
                                 <label className={`block text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 ${ttHoves.className}`}>
@@ -276,6 +303,7 @@ export default function SignupPage() {
                                 {loading ? 'Sending Code...' : 'Continue'}
                             </button>
                         </form>
+                        </>
                     ) : (
                         <form onSubmit={handleVerifyOtp} className="space-y-6">
                             <div>
