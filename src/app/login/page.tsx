@@ -2,11 +2,12 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
 import localFont from 'next/font/local'
+import GoogleSignInButton from '@/components/GoogleSignInButton'
 
 const ttHoves = localFont({ src: '../fonts/TTHovesPro-Medium.ttf' })
 const astonpoliz = localFont({ src: '../fonts/Astonpoliz.otf' })
@@ -19,6 +20,14 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const supabase = createClient()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            const err = params.get('error')
+            if (err) setError(err)
+        }
+    }, [])
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -88,7 +97,7 @@ export default function LoginPage() {
                     </Link>
                 </div>
                 <div className="w-full max-w-md p-8 sm:p-12">
-                    <div className="mb-12">
+                    <div className="mb-8">
                         <img src="/Giggle%20Logo.png" alt="Giggl Logo" className="h-16 object-contain mb-8 lg:hidden" />
                         <h1 className={`text-4xl font-bold text-white mb-3 tracking-tight ${ttHoves.className}`}>
                             Sign In
@@ -102,6 +111,23 @@ export default function LoginPage() {
                                 Sign up
                             </Link>
                         </p>
+                    </div>
+
+                    {/* Google OAuth Button */}
+                    <GoogleSignInButton
+                        text="Continue with Google"
+                        className={ttHoves.className}
+                        onError={(msg) => setError(msg)}
+                    />
+
+                    {/* Divider */}
+                    <div className="relative my-6 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-white/10" />
+                        </div>
+                        <div className={`relative bg-[#0a0a0a] px-4 text-xs uppercase tracking-widest text-gray-500 font-bold ${ttHoves.className}`}>
+                            or
+                        </div>
                     </div>
 
                     {/* Form */}
